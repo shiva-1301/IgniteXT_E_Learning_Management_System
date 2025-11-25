@@ -1,50 +1,30 @@
-🎓 IgniteXT E-Learning Management System
-🧠 Tech Stack
-HTML | CSS | JavaScript | Flask | Python | MongoDB
+IgniteXT-E-Learning-Content-Management-
+IgniteXT is an E-Learning Content Management System (CMS) designed to simplify the management and distribution of educational materials. It enables faculty to upload files and video lectures for students to access. Additionally, a built-in chatbot assists students in resolving queries, streamlining the learning process.
 
-📘 Overview
-IgniteXT E-Learning Management System is a full-stack web application that provides an interactive learning experience for students, instructors, and administrators.
-It enables course management, progress tracking, and data-driven insights — all through a clean, responsive, and secure interface.
+Purpose and Scope This document provides a comprehensive overview of the IgniteXT E-Learning Content Management System, covering its core functionality, architecture, and user roles. IgniteXT is designed to facilitate educational content distribution from faculty to students through a web-based platform with integrated AI assistance.
 
-⚙️ Key Features
-🔐 Role-Based Authentication – Secure login for students, instructors, and admins with dedicated dashboards.
-📚 Course Management – Instructors can upload courses, videos, and materials; students can enroll and learn at their own pace.
-📈 Analytics Dashboard – Tracks course engagement, completion rates, and student performance trends.
-🎥 Video Streaming Integration – Delivers smooth, high-quality educational content directly within the platform.
-📱 Responsive Design – Optimized for desktop, tablet, and mobile devices.
-🧭 Seamless Navigation – Clean UI with intuitive menus and course progress indicators.
-🧩 System Architecture
-Frontend: HTML, CSS, JavaScript
-Backend: Flask (Python)
-Database: MongoDB
-Authentication: Flask-Login & JWT
-Media Streaming: HTML5 Video Player Integration
+For detailed backend implementation including Flask routes and database operations, see Backend Implementation. For frontend interfaces and styling components, see Frontend Implementation. For system architecture details, see System Architecture.
 
-🗺️ User Roles
-👨‍🎓 Students – Access enrolled courses, watch lectures, track progress, and download resources.
-👩‍🏫 Instructors – Create and manage courses, upload content, and analyze student engagement.
-🧑‍💼 Admins – Oversee platform activity, manage users, and generate analytics reports.
-📊 Example: Student Progress Analytics
-# Flask Route Example for Student Progress Data
-@app.route('/progress/<student_id>')
-def progress(student_id):
-    progress_data = db.progress.find_one({'student_id': student_id})
-    return jsonify(progress_data)
-About
-No description, website, or topics provided.
-Resources
- Readme
- Activity
-Stars
- 0 stars
-Watchers
- 0 watching
-Forks
- 0 forks
-Releases
-No releases published
-Create a new release
-Packages
-No packages published
-Publish your first package
-Footer
+System Description
+
+IgniteXT is a web-based E-Learning Content Management System built on Flask that enables educational institutions to manage and distribute learning materials. The system implements a dual-user architecture where faculty members can upload and manage educational content, while students can access, download, and interact with these materials.
+
+The platform includes an AI-powered chatbot integration using Google Gemini to assist students with learning queries, making it a comprehensive solution for modern educational environments.
+
+User Role Architecture
+
+The system implements a strict role-based access control system with separated database storage and distinct permission sets:
+
+Role-Based System Design
+
+Key Technical Components
+
+The IgniteXT system consists of several interconnected technical components that work together to provide the e-learning platform functionality:
+
+Component || Technology || Purpose || Key Files Web Framework || Flask HTTP request handling, routing, session management || app.py Database || MongoDB User data, course content, and file metadata storage || CRV and TRV databases Authentication || bcrypt + Flask sessions Secure user login and role-based access control || app.py authentication routes AI Integration || Google Gemini API Intelligent chatbot assistance for students || config.py GEMINI_API_KEY File Storage || Local filesystem Educational content and media file storage || uploads/ directory Configuration || Environment variables External service keys and database connections || config.py
+
+User Interface Components The system provides role-specific interfaces through a comprehensive CSS framework and JavaScript interactions:
+
+Interface Type Target Users Key Styling Functionality Authentication All users css/auth.css Login/registration with role selection Dashboard All users css/dashboard.css Personalized user home interface Course Management Faculty/Students css/courses.css, css/playlist.css Content organization and access Content Upload Faculty only css/upload.css File and video upload interface Video Viewing All users css/watchvideo.css Video playback with comments AI Chatbot Students css/chatbot.css Interactive AI assistance File Downloads Students css/download.css Educational resource access External Service Integration IgniteXT integrates with external services to provide enhanced functionality:
+
+MongoDB Atlas: Cloud database hosting for scalable data storage via MONGODB_URI configuration Google Gemini AI: Advanced chatbot capabilities through GEMINI_API_KEY integration bcrypt Library: Industry-standard password hashing for user security These integrations are managed through the configuration system in config.py and accessed throughout the Flask application in app.py.
