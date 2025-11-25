@@ -1,0 +1,67 @@
+/* Uploaded Files Section */
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+    font-size: 2rem;
+}
+
+div {
+    margin: 20px auto;
+    width: 80%;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+ul li a {
+    text-decoration: none;
+    color: #0077b6;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+ul li a:hover {
+    color: #f39c12;
+}
+
+p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin: 20px 0;
+}
+
+a.upload-link {
+    display: block;
+    text-align: center;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #0077b6;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    width: fit-content;
+    transition: background-color 0.3s ease;
+}
+
+a.upload-link:hover {
+    background-color: #f39c12;
+}

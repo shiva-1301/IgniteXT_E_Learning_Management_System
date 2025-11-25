@@ -1,0 +1,342 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body.dark{
+    --cs:#333;
+    --cb:#22222282;
+    --black:white;
+  }
+  body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.5;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Header Section */
+  .header {
+    background: #333;
+    color: #fff;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .header .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .header .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .header .search-form {
+    flex: 1;
+    margin: 0 1.5rem;
+    position: relative;
+  }
+  
+  .header .search-form input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+  }
+  
+  .header .search-form button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  .header .icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.2rem;
+  }
+
+  
+/* Icons and Buttons */
+.header .icons div {
+  cursor: pointer;
+  font-size: 1.4rem;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.header .icons div:hover {
+  color: #f39c12;
+}
+  
+  .header .profile {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    right: 1rem;
+    top: 5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .header .profile.active {
+    display: flex;
+    background-color: var(--light-bg, white); 
+    color: var(--light-color, rgb(0, 0, 0));
+  }
+  
+  /* Sidebar */
+  .side-bar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 300px;
+    height: 100%;
+    background: #222;
+    color: #fff;
+    z-index: 2000;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: left 0.3s ease-in-out;
+  }
+  
+  .side-bar.active {
+    left: 0;
+  }
+  
+  .side-bar #close-btn {
+    align-self: flex-end;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  .side-bar .profile {
+    text-align: center;
+  }
+  
+  .side-bar .profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+  
+  .side-bar .profile .name {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .side-bar .navbar a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    color: #fff;
+    text-decoration: none;
+    gap: 1rem;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+  }
+  
+  .side-bar .navbar a:hover {
+    background: #333;
+  }
+  
+  /* Courses Section */
+  .courses {
+    padding: 2rem;
+  background-color: var(--cs, #f9f7f7); 
+  }
+  
+  .courses .heading {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #0077b6;
+  }
+  
+  .courses .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .courses .box {
+    
+  background-color: var(--cb, white); 
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .courses .box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .courses .box .tutor {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .courses .box .tutor img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  .courses .box .tutor .info h3 {
+    font-size: 1.2rem;
+    color: var(--black,#333);
+
+  }
+  
+  .courses .box .tutor .info span {
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  .courses .box .thumb {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  
+  .courses .box .thumb img {
+    width: 100%;
+    border-radius: 10px;
+  }
+  
+  .courses .box .thumb span {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 5px;
+  }
+  
+  .courses .box .title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #0077b6;
+  }
+  
+  .courses .box .inline-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #0077b6;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+  }
+  
+  .courses .box .inline-btn:hover {
+    background: #005f8c;
+  }
+  
+  /* Chatbot Icon */
+  #chatbot {
+    position: fixed;
+    bottom: 40px;
+    right: 81px;
+    width: 90px;
+    height: 90px;
+    background-color: #007bff; /* Button color */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+  }
+  
+  #chatbot img {
+    width: 50%;
+    height: 50%;
+  }
+  
+  #chatbot:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+  }
+  
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: #fff;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+  }
+  
+  .footer span {
+    color: #f39c12;
+  }
+  
+  .header .profile.active {
+    display: flex;
+    height: 250px;
+    width: 250px;
+  }
+
+  img.logo{
+    height:  85px;
+  }
+
+
+  .footer {
+    text-align: center;
+    padding: 1rem;
+    background: #333;
+    color: #fff;
+    font-size: 0.9rem;
+    margin-top: 2rem;
+  }
+  body.dark{
+    --light-color: #ffffff;
+    --light-bg: #333;
+    --black: #fff;
+    --white: #222;
+    --border: .1rem solid rgba(255, 255, 255, .2);
+    --hb:#22222282;
+  
+  }
+  .footer span {
+    color: #f39c12;
+  }

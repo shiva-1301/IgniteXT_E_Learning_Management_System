@@ -1,0 +1,85 @@
+/* Remove existing icon from the middle */
+body {
+    margin: 0;
+    padding: 0;
+    background: #222222;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+/* IgniteXT Icon */
+.icon {
+    position: absolute;
+    top: 20px; /* Space from the top */
+    left: 20px; /* Space from the left */
+    width: 100px; /* Smaller size */
+    height: auto;
+    z-index: 10; /* Ensure the icon is always on top */
+}
+
+/* Animated Background */
+.square, .circle, .triangle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Remaining CSS for animated shapes (square, circle, triangle) remains unchanged */
+.square {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(#303030, #757575);
+    z-index: 2;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    background: #1cd99d;
+    border-radius: 50%;
+}
+
+.triangle {
+    width: 50px;
+    height: 50px;
+    background: #f5f5f5;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+header {
+    text-align: center;
+    color: #18ed71;
+    padding-top: 60px;
+}
+
+.pdf-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.pdf-card {
+    width: 200px;
+    background-color: #444;
+    color: rgb(42, 186, 87);
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.pdf-card:hover {
+    transform: scale(1.05);
+}
+
+.pdf-card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+img.logo{
+    height: 85px;
+}

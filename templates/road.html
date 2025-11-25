@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Roadmaps</title>
+    <link rel="stylesheet" href="/static/road.css">
+</head>
+<body>
+    <!-- IgniteXT Icon at the top-left corner -->
+    <a href="{{ url_for('home') }}"><img src="/static/igniteXT icon.png" alt="Logo" class="logo"></a>
+                <span class="logo-text" style="font-family: 'Times New Roman', Times, serif; font-size: 2.3rem; font-weight: bolder; margin-right: -10px;color: yellow;">
+                    <span style="margin-left: -5px; font-weight: 700; margin-right: -5px; color: white; font-family: 'Times New Roman', Times, serif;margin-left: -15px;">I</span>
+                    gnite <span style="margin-left: -5px; font-weight: 700;color: white;font-family: 'Times New Roman', Times, serif;">XT</span>
+
+
+    <!-- Main Content -->
+    <header>
+        <h1>Explore Developer Roadmaps</h1>
+        <p>Your journey to becoming a developer starts here!</p>
+    </header>
+    <main class="pdf-gallery">
+        <!-- PDF Cards -->
+        <script>
+            const pdfs = [
+                { title: "AI Data Scientist", file: "ai-data-scientist.pdf" },
+                { title: "AI Engineer", file: "ai-engineer.pdf" },
+                { title: "Android", file: "android.pdf" },
+                { title: "API Design", file: "api-design.pdf" },
+                { title: "Backend (1)", file: "backend (1).pdf" },
+                { title: "Backend", file: "backend.pdf" },
+                { title: "Blockchain", file: "blockchain.pdf" },
+                { title: "C++", file: "cpp.pdf" },
+                { title: "Cyber Security", file: "cyber-security.pdf" },
+                { title: "Data Analyst", file: "data-analyst.pdf" },
+                { title: "DevOps", file: "devops.pdf" },
+                { title: "DevRel", file: "devrel.pdf" },
+                { title: "Engineering Manager", file: "engineering-manager.pdf" },
+                { title: "Frontend (1)", file: "frontend (1).pdf" },
+                { title: "Frontend", file: "frontend.pdf" },
+                { title: "Full Stack", file: "full-stack.pdf" },
+                { title: "Game Developer", file: "game-developer.pdf" },
+                { title: "Git & GitHub", file: "git-github.pdf" },
+                { title: "iOS", file: "ios.pdf" },
+                { title: "Java", file: "java.pdf" },
+                { title: "JavaScript", file: "javascript.pdf" },
+                { title: "MLOps", file: "mlops.pdf" },
+                { title: "PostgreSQL DBA", file: "postgresql-dba.pdf" },
+                { title: "Product Manager", file: "product-manager.pdf" },
+                { title: "Python", file: "python.pdf" },
+                { title: "QA", file: "qa.pdf" },
+                { title: "Server-side Game Developer", file: "server-side-game-developer.pdf" },
+                { title: "Software Architect", file: "software-architect.pdf" },
+                { title: "Technical Writer", file: "technical-writer.pdf" },
+                { title: "UX Design", file: "ux-design.pdf" }
+            ];
+
+            const gallery = document.querySelector('.pdf-gallery');
+            pdfs.forEach(pdf => {
+                const card = document.createElement('div');
+                card.classList.add('pdf-card');
+                card.innerHTML = `
+                    <div class="pdf-info">
+                        <h3>${pdf.title}</h3>
+                    </div>
+                `;
+                card.onclick = () => window.open(`/static/roadmaps/${pdf.file}`, '_blank');
+                gallery.appendChild(card);
+            });a
+        </script>
+    </main>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/chatbot.css">
+    <title>Chat Bot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+
+</head>
+<body>
+    <header class="header">
+        <section class="flex">
+            <a href="{{ url_for('home') }}"><img src="/static/igniteXT icon.png" alt="Logo" class="logo"></a>
+                <span class="logo-text" style="font-family: 'Times New Roman', Times, serif; font-size: 2.3rem; font-weight: bolder; margin-right: -10px;color: yellow">
+                    <span style="margin-left: -5px; font-weight: 700; margin-right: -5px; color: white; font-family: 'Times New Roman', Times, serif;margin-left: -15px;">I</span>
+                    gnite <span style="margin-left: -5px; font-weight: 700;color: white;font-family: 'Times New Roman', Times, serif;">XT</span>
+            </span>
+
+            <form action="search.html" method="post" class="search-form">
+                <input type="text" name="search_box" required placeholder="Search courses..." maxlength="100">
+                <button type="submit" class="fas fa-search"></button>
+            </form>
+
+            <div class="icons">
+                <div id="menu-btn" class="fas fa-bars"></div>
+                <div id="search-btn" class="fas fa-search"></div>
+                <div id="user-btn" class="fas fa-user"></div>
+                <div id="toggle-btn" class="fas fa-sun"></div>
+            </div>
+
+            <div class="profile">
+                <img src="/static/images/pic-1.jpg" class="image" alt="Profile Picture">
+                <h3 class="name">{{ username }}</h3>
+                {% if role == 'faculty' %}
+            <p class="role">Faculty</p>
+            {% else %}
+            <p class="role">Student</p>
+            {% endif %}
+            <a href="{{ url_for('dashboard') }}" class="btn">View Profile</a>
+                <div class="flex-btn">
+                    <a href="{{ url_for('login_register') }}" class="option-btn">Log Out</a>
+                </div>
+            </div>
+        </section>
+    </header>
+
+    <!-- Sidebar Section -->
+    <div class="side-bar">
+        <div id="close-btn">
+            <i class="fas fa-times"></i>
+        </div>
+
+        <div class="profile">
+            <img src="/static/images/pic-1.jpg" class="image" alt="Profile Picture">
+            <h3 class="name">{{ username }}</h3>
+            {% if role == 'faculty' %}
+            <p class="role">Faculty</p>
+            {% else %}
+            <p class="role">Student</p>
+            {% endif %}
+            <a href="{{ url_for('dashboard') }}" class="btn">View Profile</a>
+        </div>
+
+        <nav class="navbar">
+            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i><span>Home</span></a><br>
+            <a href="{{ url_for('dashboard') }}"><i class="fas fa-question"></i><span>Dashboard</span></a><br>
+            <a href="{{url_for('courses')}}"><i class="fas fa-graduation-cap"></i><span>Courses</span></a><br>
+            <a href="{{ url_for('chatbot') }}"><i class="fa-regular fa-lemon"></i><span>ChatBot</span></a><br>
+            <a href="contact.html"><i class="fas fa-headset"></i><span>Contact Us</span></a><br>
+            {% if role == 'faculty' %}
+            <a href="{{ url_for('upload') }}"><i class="fa fa-upload"></i><span>Upload</span></a><br>
+            {% endif %}
+            <a href="{{ url_for('download') }}"><i class="fa fa-download"></i><span>Download</span></a><br>
+        </nav>
+    </div>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Chatbot</h1>
+        </div>
+        <div class="chat-history" id="chatHistory">
+            <!-- Chat messages will be dynamically added here -->
+        </div>
+        <div class="chat-input">
+            <form id="chatForm">
+                <textarea id="userInput" placeholder="Type your message here..." rows="2" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const chatForm = document.getElementById('chatForm');
+        const chatHistory = document.getElementById('chatHistory');
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userInput = document.getElementById('userInput').value;
+        
+            // Display user's message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user';
+            userMessage.textContent = userInput;
+            chatHistory.appendChild(userMessage);
+        
+            // Ensure messages are spaced out
+            chatHistory.appendChild(document.createElement('br')); // Add a line break
+        
+            // Scroll to the bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        
+            // Send message to backend
+            const response = await fetch('/dashboard/generate-response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `user_input=${encodeURIComponent(userInput)}`,
+            });
+            const data = await response.json();
+        
+            // Display chatbot's response
+            const botMessage = document.createElement('div');
+            botMessage.className = 'chat-message bot';
+            botMessage.innerHTML = styleChatbotResponse(data.response || data.error);
+            chatHistory.appendChild(botMessage);
+        
+            // Add another line break after bot's message
+            chatHistory.appendChild(document.createElement('br')); // Add a line break
+        
+            // Scroll to the bottom
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        
+            // Clear input field after sending the message
+            document.getElementById('userInput').value = ''; // Clears the input field
+        });
+        
+        // Function to style chatbot responses
+        function styleChatbotResponse(text) {
+            return text
+                .replace(/(?:\*\*(.*?)\*\*)/g, '<strong>$1</strong>') // Bold for headings
+                .replace(/(?:\*(.*?)\*)/g, '<em>$1</em>'); // Italic for paragraphs
+        }
+        
+    </script>
+    <footer class="footer">
+        &copy; 2024 by <span>IGNITEXT</span>. All rights reserved.
+    </footer>
+
+</body>
+</html>

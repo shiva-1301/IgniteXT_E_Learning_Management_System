@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
+
+:root {
+    --main-color: #8e44ad;
+    --red: #e74c3c;
+    --orange: #f39c12;
+    --light-color: #888;
+    --light-bg: #eee;
+    --black: #2c3e50;
+    --white: #fff;
+    --border: .1rem solid rgba(0, 0, 0, .2);
+}
+
+* {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
+}
+
+body {
+    background-color: var(--light-bg);
+    font-size: 1.6rem;
+    color: var(--black);
+    padding-left: 30rem;
+}
+
+a {
+    color: var(--black);
+    transition: color 0.2s linear;
+}
+
+a:hover {
+    color: var(--main-color);
+}
+
+/* Header Styles */
+.header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    z-index: 1000;
+    border-bottom: var(--border);
+}
+
+.header .flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 1.5rem 2rem;
+}
+
+.header .flex .logo {
+    font-size: 2.5rem;
+    color: var(--black);
+    font-weight: 600;
+}
+
+.header .flex .search-form {
+    width: 50rem;
+    border-radius: .5rem;
+    background-color: var(--light-bg);
+    padding: 1.5rem 2rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.header .flex .search-form input {
+    width: 100%;
+    font-size: 1.8rem;
+    color: var(--black);
+    background: none;
+}
+
+.header .flex .search-form button {
+    background: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--black);
+}
+
+.header .flex .search-form button:hover {
+    color: var(--main-color);
+}
+
+.header .flex .icons div {
+    font-size: 2rem;
+    color: var(--black);
+    background-color: var(--light-bg);
+    border-radius: .5rem;
+    height: 4.5rem;
+    width: 4.5rem;
+    line-height: 4.5rem;
+    cursor: pointer;
+    text-align: center;
+    margin-left: .7rem;
+}
+
+.header .flex .icons div:hover {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+.header .flex .profile {
+    position: absolute;
+    top: 120%;
+    right: 2rem;
+    background-color: var(--white);
+    border-radius: .5rem;
+    padding: 1.5rem;
+    text-align: center;
+    transform-origin: top right;
+    transform: scale(0);
+    transition: .2s linear;
+    width: 30rem;
+}
+
+.header .flex .profile.active {
+    transform: scale(1);
+}
+
+.header .flex .profile .image {
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+.header .flex .profile .name {
+    font-size: 2rem;
+    color: var(--black);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header .flex .profile .role {
+    font-size: 1.8rem;
+    color: var(--light-color);
+}
+
+.header .flex .profile .btn {
+    background-color: var(--main-color);
+    color: #fff;
+    padding: 1rem 3rem;
+    border-radius: .5rem;
+    text-transform: capitalize;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.header .flex .profile .btn:hover {
+    background-color: var(--black);
+}
+
+.header .flex .profile .flex-btn .option-btn {
+    background-color: var(--orange);
+    color: #fff;
+    padding: 1rem 3rem;
+    border-radius: .5rem;
+    text-transform: capitalize;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+.header .flex .profile .flex-btn .option-btn:hover {
+    background-color: var(--black);
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 30rem;
+    background-color: var(--white);
+    height: 100vh;
+    border-right: var(--border);
+    z-index: 1200;
+}
+
+.navbar a {
+    display: block;
+    padding: 2rem;
+    font-size: 2rem;
+    color: var(--black);
+    transition: all 0.2s linear;
+}
+
+.navbar a i {
+    margin-right: 1.5rem;
+    color: var(--main-color);
+}
+
+.navbar a:hover {
+    background-color: var(--light-bg);
+}
+
+.navbar a:hover i {
+    margin-right: 2.5rem;
+}
+
+/* Icons */
+.fas {
+    transition: color 0.2s linear;
+}
+
+.fas:hover {
+    color: var(--main-color);
+}
+
+
+
+/* CHATBOT ICON CSS */
+#chatbot {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #007bff; /* Button color */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 1000; /* Ensure it appears above other content */
+    transition: transform 0.3s ease;
+  }
+  
+  #chatbot img {
+    width: 50%;
+    height: 50%;
+  }
+  
+  #chatbot:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+  }
+  /* CHATBOT ICON CSS */
