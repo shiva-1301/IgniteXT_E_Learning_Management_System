@@ -1,30 +1,109 @@
-IgniteXT-E-Learning-Content-Management-
-IgniteXT is an E-Learning Content Management System (CMS) designed to simplify the management and distribution of educational materials. It enables faculty to upload files and video lectures for students to access. Additionally, a built-in chatbot assists students in resolving queries, streamlining the learning process.
+# IgniteXT — E-Learning Content Management System
 
-Purpose and Scope This document provides a comprehensive overview of the IgniteXT E-Learning Content Management System, covering its core functionality, architecture, and user roles. IgniteXT is designed to facilitate educational content distribution from faculty to students through a web-based platform with integrated AI assistance.
+IgniteXT is a web-based e-learning platform where **faculty** upload study materials and lectures, and **students** browse courses, watch videos, follow developer roadmaps, download resources and get help from a built-in **AI study assistant** powered by Google Gemini.
 
-For detailed backend implementation including Flask routes and database operations, see Backend Implementation. For frontend interfaces and styling components, see Frontend Implementation. For system architecture details, see System Architecture.
+**Live demo:** _coming soon — see [Deployment](#deployment)_
 
-System Description
+![IgniteXT screenshot](docs/screenshot.png)
+<!-- Add a screenshot at docs/screenshot.png -->
 
-IgniteXT is a web-based E-Learning Content Management System built on Flask that enables educational institutions to manage and distribute learning materials. The system implements a dual-user architecture where faculty members can upload and manage educational content, while students can access, download, and interact with these materials.
+---
 
-The platform includes an AI-powered chatbot integration using Google Gemini to assist students with learning queries, making it a comprehensive solution for modern educational environments.
+## Features
 
-User Role Architecture
+| | |
+|---|---|
+| 🔐 **Authentication** | Sign up / sign in with role selection (Student or Faculty), bcrypt-hashed passwords, session-based auth |
+| 🎓 **Courses & playlists** | Course catalogue, playlist pages and a video player with live search filtering |
+| 💬 **Comments** | Students comment on lessons; faculty can moderate (delete) comments |
+| 📁 **Study materials** | Faculty upload files (drag and drop, size limit, blocked executable types); everyone can download |
+| 🗺️ **Developer roadmaps** | 25 PDF roadmaps (Frontend, Backend, DevOps, AI, Python, Java…) |
+| 🤖 **AI assistant** | Chat with Google Gemini for study help, with typing indicator and suggested prompts |
+| 🌗 **Light / dark mode** | Remembers your preference |
+| 📱 **Responsive** | Works on mobile, tablet and desktop; keyboard and screen-reader friendly |
 
-The system implements a strict role-based access control system with separated database storage and distinct permission sets:
+## Tech stack
 
-Role-Based System Design
+- **Backend:** Python 3, Flask, Flask-Bcrypt
+- **Database:** MongoDB (MongoDB Atlas) via PyMongo
+- **AI:** Google Gemini (`google-generativeai`)
+- **Frontend:** Jinja2 templates, vanilla CSS (custom design system) and vanilla JavaScript, Font Awesome, Inter font
+- **Deployment:** Gunicorn on Render
 
-Key Technical Components
+## Project structure
 
-The IgniteXT system consists of several interconnected technical components that work together to provide the e-learning platform functionality:
+```
+├── app.py               # Flask app: routes, auth, uploads, chatbot API
+├── config.py            # Reads settings from environment variables
+├── requirements.txt
+├── render.yaml          # One-click Render deployment blueprint
+├── .env.example         # Template for local environment variables
+├── static/
+│   ├── css/main.css     # Design system + all page styles
+│   ├── js/main.js       # Theme toggle, sidebar, menus, search
+│   ├── images/          # Logos, thumbnails, avatars, demo videos
+│   └── roadmaps/        # Developer roadmap PDFs
+├── templates/
+│   ├── base.html        # HTML skeleton
+│   ├── layout.html      # App shell: header, sidebar, footer
+│   ├── _macros.html     # Reusable components (flash messages, course card)
+│   └── *.html           # Pages
+└── uploads/             # Files uploaded by faculty (created at runtime, git-ignored)
+```
 
-Component || Technology || Purpose || Key Files Web Framework || Flask HTTP request handling, routing, session management || app.py Database || MongoDB User data, course content, and file metadata storage || CRV and TRV databases Authentication || bcrypt + Flask sessions Secure user login and role-based access control || app.py authentication routes AI Integration || Google Gemini API Intelligent chatbot assistance for students || config.py GEMINI_API_KEY File Storage || Local filesystem Educational content and media file storage || uploads/ directory Configuration || Environment variables External service keys and database connections || config.py
+## Getting started
 
-User Interface Components The system provides role-specific interfaces through a comprehensive CSS framework and JavaScript interactions:
+### Prerequisites
+- Python 3.10+
+- A MongoDB database (free [MongoDB Atlas](https://www.mongodb.com/atlas) cluster or local MongoDB)
+- A [Google Gemini API key](https://aistudio.google.com/app/apikey) (optional; only the chatbot needs it)
 
-Interface Type Target Users Key Styling Functionality Authentication All users css/auth.css Login/registration with role selection Dashboard All users css/dashboard.css Personalized user home interface Course Management Faculty/Students css/courses.css, css/playlist.css Content organization and access Content Upload Faculty only css/upload.css File and video upload interface Video Viewing All users css/watchvideo.css Video playback with comments AI Chatbot Students css/chatbot.css Interactive AI assistance File Downloads Students css/download.css Educational resource access External Service Integration IgniteXT integrates with external services to provide enhanced functionality:
+### Setup
 
-MongoDB Atlas: Cloud database hosting for scalable data storage via MONGODB_URI configuration Google Gemini AI: Advanced chatbot capabilities through GEMINI_API_KEY integration bcrypt Library: Industry-standard password hashing for user security These integrations are managed through the configuration system in config.py and accessed throughout the Flask application in app.py.
+```bash
+git clone https://github.com/shiva-1301/IgniteXT_E_Learning_Management_System.git
+cd IgniteXT_E_Learning_Management_System
+
+python -m venv venv
+# Windows: venv\Scripts\activate    macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+
+cp .env.example .env      # then edit .env with your own values
+python app.py
+```
+
+Open http://127.0.0.1:5000. Register as **Faculty** to see the Upload page, or as **Student** for the learner view.
+
+### Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `MONGODB_URI` | ✅ | MongoDB connection string |
+| `SECRET_KEY` | ✅ in production | Flask session signing key (`python -c "import secrets; print(secrets.token_hex(32))"`) |
+| `GEMINI_API_KEY` | optional | Enables the AI assistant |
+| `GEMINI_MODEL` | optional | Defaults to `gemini-2.0-flash` |
+| `FLASK_DEBUG` | optional | `1` to enable debug mode locally |
+| `MAX_UPLOAD_MB` | optional | Upload size limit, default `50` |
+
+## Deployment
+
+The repo includes a [`render.yaml`](render.yaml) blueprint for [Render](https://render.com) (free tier).
+
+1. Push this repository to GitHub.
+2. In MongoDB Atlas, go to **Network Access** and allow `0.0.0.0/0` (Render IPs are dynamic).
+3. On Render, choose **New → Blueprint** and select this repo. Render reads `render.yaml`.
+4. When prompted, enter `MONGODB_URI` and `GEMINI_API_KEY`. `SECRET_KEY` is generated automatically.
+5. Deploy. Your app will be live at `https://ignitext.onrender.com` (or similar).
+
+> **Note:** Render's free tier has an ephemeral filesystem, so files uploaded by faculty are lost on redeploy or restart. For persistent uploads, add a Render Disk mounted at `/opt/render/project/src/uploads`, or move uploads to cloud storage (S3, Cloudinary or MongoDB GridFS).
+
+## Roadmap / ideas
+
+- Store courses, playlists and videos in MongoDB so faculty can create them from the UI
+- Real likes and saved playlists
+- CSRF protection (Flask-WTF) and rate limiting on login
+- Password reset via email
+
+## License
+
+Educational project. © IgniteXT.
