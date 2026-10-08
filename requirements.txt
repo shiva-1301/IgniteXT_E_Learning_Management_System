@@ -1,0 +1,6 @@
+Flask>=3.0,<4
+Flask-Bcrypt>=1.0.1
+pymongo[srv]>=4.6
+google-generativeai>=0.3.0
+python-dotenv>=1.0
+gunicorn>=21.2
