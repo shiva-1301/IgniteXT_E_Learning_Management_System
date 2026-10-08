@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block body %}
+<main class="error-page">
+    <div>
+        <div class="error-code">{{ code }}</div>
+        <h1>{{ 'Access denied' if code == 403 else ('Page not found' if code == 404 else 'Something went wrong') }}</h1>
+        <p class="muted">{{ message }}</p>
+        <div class="row" style="justify-content: center;">
+            <a href="{{ url_for('index') }}" class="btn btn-primary"><i class="fas fa-house" aria-hidden="true"></i> Go home</a>
+            <a href="javascript:history.back()" class="btn btn-outline">Go back</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

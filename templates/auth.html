@@ -1,124 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Register</title>
-    <link rel="stylesheet" href="/static/auth.css">
-</head>
-<body>
-    <img src="/static/igniteXT icon.png" alt="Logo" class="logo">
-
-                <span class="logo-text" style=
-                "font-family: 'Times New Roman', Times, serif; 
-                font-size: 3rem; 
-                font-weight: bolder; 
-                margin-top: 20px;
-                margin-bottom: 20px;
-                color: yellow">
-                    <span style="
-                    margin-left: -5px; 
-                    font-weight: 700; 
-                    margin-right: -5px; color: white; 
-                    font-family: 'Times New Roman', Times, serif;
-                    margin-left: -15px;
-                    font-size: 3rem;
-                    ">I
-                    </span>
-                    gnite <span style="
-                    margin-left: -5px; 
-                    font-weight: 700;
-                    color: white;
-                    font-family: 'Times New Roman', Times, serif;
-                    font-size: 3rem;">XT</span>
-            </span>
-    <div class="container" id="container">
-        
-        <!-- Register Form -->
-        <div class="form-container sign-up-container">
-            <form action="/auth" method="POST">
-                <h1>Create Account</h1>
-                <input type="hidden" name="action" value="register"> <!-- Specify register action -->
-
-                <div class="input-box">
-                    <i class="bx bxs-user"></i>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
-                </div>
-
-                <div class="input-box">
-                    <i class="bx bxs-envelope"></i>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                </div>
-
-                <div class="input-box">
-                    <i class="bx bxs-lock-alt"></i>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-
-                <!-- Role Selection -->
-                <div class="role-selection">
-                    <label>
-                        <input type="radio" name="role" value="student" required> Student
-                    </label>
-                    <label>
-                        <input type="radio" name="role" value="faculty"> Faculty
-                    </label>
-                </div>
-
-                <button type="submit">Sign Up</button>
-            </form>
+{% extends "base.html" %}
+{% from "_macros.html" import flashes %}
+{% block title %}Sign in{% endblock %}
+{% block body %}
+<div class="auth-page">
+    <aside class="auth-aside">
+        <a href="{{ url_for('login_register') }}" class="brand">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" width="34" height="34">
+            <span>Ignite<span class="xt">XT</span></span>
+        </a>
+        <div style="position: relative; z-index: 1;">
+            <h1>Learn, teach and grow — all in one place.</h1>
+            <p>IgniteXT connects faculty and students with video lectures, study materials, developer roadmaps and an AI study assistant.</p>
+            <ul class="feature-list">
+                <li><i class="fas fa-play" aria-hidden="true"></i> Structured video courses</li>
+                <li><i class="fas fa-folder-open" aria-hidden="true"></i> Downloadable study materials</li>
+                <li><i class="fas fa-route" aria-hidden="true"></i> 25+ developer roadmaps</li>
+                <li><i class="fas fa-robot" aria-hidden="true"></i> AI assistant powered by Gemini</li>
+            </ul>
         </div>
+        <small style="color: #c7d2fe; position: relative; z-index: 1;">&copy; {{ current_year }} IgniteXT</small>
+    </aside>
 
-        <!-- Login Form -->
-        <div class="form-container sign-in-container">
-            <form action="/auth" method="POST">
-                <h1>Sign In</h1>
-                <input type="hidden" name="action" value="login"> <!-- Specify login action -->
+    <main class="auth-main">
+        <div class="auth-card">
+            {% set register = mode == 'register' %}
+            <h1 id="auth-heading" style="font-size: 1.6rem;">{{ 'Create your account' if register else 'Welcome back' }}</h1>
+            <p class="muted">{{ 'Join as a student or faculty member.' if register else 'Sign in to continue learning.' }}</p>
 
-                <div class="input-box">
-                    <i class="bx bxs-envelope"></i>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                </div>
+            {{ flashes() }}
 
-                <div class="input-box">
-                    <i class="bx bxs-lock-alt"></i>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-                <a href="#">Forgot your password?</a>
-                <button type="submit">Sign In</button>
-            </form>
-        </div>
-
-        <!-- Overlay Section -->
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p>To keep connected with us, please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Enter your personal details and start your journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
-                </div>
+            <div class="tabs" role="tablist" aria-label="Sign in or register">
+                <button type="button" class="tab" role="tab" id="tab-login" aria-controls="panel-login" aria-selected="{{ 'false' if register else 'true' }}">Sign in</button>
+                <button type="button" class="tab" role="tab" id="tab-register" aria-controls="panel-register" aria-selected="{{ 'true' if register else 'false' }}">Sign up</button>
             </div>
+
+            <!-- Login Form -->
+            <form action="{{ url_for('login_register') }}" method="POST" id="panel-login" role="tabpanel" aria-labelledby="tab-login" {{ 'hidden' if register }}>
+                <input type="hidden" name="action" value="login">
+                <div class="field">
+                    <label for="login-email">Email</label>
+                    <div class="input-icon"><i class="fas fa-envelope" aria-hidden="true"></i>
+                        <input type="email" id="login-email" name="email" class="input" placeholder="you@example.com" autocomplete="email" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="login-password">Password</label>
+                    <div class="input-icon"><i class="fas fa-lock" aria-hidden="true"></i>
+                        <input type="password" id="login-password" name="password" class="input" placeholder="Your password" autocomplete="current-password" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+            </form>
+
+            <!-- Register Form -->
+            <form action="{{ url_for('login_register') }}" method="POST" id="panel-register" role="tabpanel" aria-labelledby="tab-register" {{ '' if register else 'hidden' }}>
+                <input type="hidden" name="action" value="register">
+                <div class="field">
+                    <label for="reg-username">Username</label>
+                    <div class="input-icon"><i class="fas fa-user" aria-hidden="true"></i>
+                        <input type="text" id="reg-username" name="username" class="input" placeholder="Your name" minlength="2" maxlength="40" autocomplete="username" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="reg-email">Email</label>
+                    <div class="input-icon"><i class="fas fa-envelope" aria-hidden="true"></i>
+                        <input type="email" id="reg-email" name="email" class="input" placeholder="you@example.com" autocomplete="email" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="reg-password">Password</label>
+                    <div class="input-icon"><i class="fas fa-lock" aria-hidden="true"></i>
+                        <input type="password" id="reg-password" name="password" class="input" placeholder="At least 6 characters" minlength="6" autocomplete="new-password" required>
+                    </div>
+                </div>
+                <fieldset class="field" style="border: 0; padding: 0; margin: 0 0 1.25rem;">
+                    <legend class="label" style="margin-bottom: .35rem;">I am a</legend>
+                    <div class="segmented">
+                        <input type="radio" name="role" value="student" id="role-student" required checked>
+                        <label for="role-student"><i class="fas fa-user-graduate" aria-hidden="true"></i> Student</label>
+                        <input type="radio" name="role" value="faculty" id="role-faculty">
+                        <label for="role-faculty"><i class="fas fa-chalkboard-user" aria-hidden="true"></i> Faculty</label>
+                    </div>
+                </fieldset>
+                <button type="submit" class="btn btn-primary btn-block">Create account</button>
+            </form>
         </div>
-    </div>
-
-    <!-- JavaScript -->
-    <script>
-        const signUpButton = document.getElementById('signUp');
-        const signInButton = document.getElementById('signIn');
-        const container = document.getElementById('container');
-
-        signUpButton.addEventListener('click', () => {
-            container.classList.add('right-panel-active');
-        });
-
-        signInButton.addEventListener('click', () => {
-            container.classList.remove('right-panel-active');
-        });
-    </script>
-</body>
-</html>
+    </main>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    (function () {
+        const tabs = { login: document.getElementById('tab-login'), register: document.getElementById('tab-register') };
+        const panels = { login: document.getElementById('panel-login'), register: document.getElementById('panel-register') };
+        const heading = document.getElementById('auth-heading');
+        function show(name) {
+            Object.keys(tabs).forEach((k) => {
+                const on = k === name;
+                tabs[k].setAttribute('aria-selected', String(on));
+                panels[k].hidden = !on;
+            });
+            heading.textContent = name === 'register' ? 'Create your account' : 'Welcome back';
+            heading.nextElementSibling.textContent = name === 'register' ? 'Join as a student or faculty member.' : 'Sign in to continue learning.';
+        }
+        tabs.login.addEventListener('click', () => show('login'));
+        tabs.register.addEventListener('click', () => show('register'));
+    })();
+</script>
+{% endblock %}

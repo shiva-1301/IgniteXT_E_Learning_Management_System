@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% from "_macros.html" import flashes %}
+{% block body %}
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<header class="header">
+    <button id="menu-btn" class="icon-btn" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false"><i class="fas fa-bars"></i></button>
+    <a href="{{ url_for('home') }}" class="brand" aria-label="IgniteXT home">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="" width="34" height="34">
+        <span class="word">Ignite<span class="xt">XT</span></span>
+    </a>
+
+    <form class="search-form" role="search">
+        <i class="fas fa-search" aria-hidden="true"></i>
+        <label for="site-search" class="sr-only">Search courses</label>
+        <input id="site-search" type="search" name="q" placeholder="Search courses…" maxlength="100" autocomplete="off">
+    </form>
+
+    <div class="header-actions">
+        <button id="search-btn" class="icon-btn" aria-label="Search"><i class="fas fa-search"></i></button>
+        <button id="toggle-btn" class="icon-btn" aria-label="Switch to dark mode"><i class="fas fa-moon"></i></button>
+        <div class="user-menu">
+            <button id="user-btn" class="avatar-btn" aria-label="Account menu" aria-haspopup="true" aria-expanded="false" aria-controls="user-dropdown">
+                <img src="{{ url_for('static', filename='images/pic-1.jpg') }}" class="avatar" alt="" width="36" height="36">
+            </button>
+            <div id="user-dropdown" class="dropdown">
+                <img src="{{ url_for('static', filename='images/pic-1.jpg') }}" class="avatar" alt="" width="64" height="64">
+                <h3 class="name">{{ username }}</h3>
+                <span class="badge">{{ role }}</span>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-block">View profile</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline btn-block"><i class="fas fa-right-from-bracket" aria-hidden="true"></i> Log out</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="layout">
+    <aside id="sidebar" class="sidebar" aria-label="Main navigation">
+        <div class="sidebar-close"><button id="close-btn" class="icon-btn" aria-label="Close navigation"><i class="fas fa-xmark"></i></button></div>
+        <nav>
+            <p class="nav-label">Learn</p>
+            <a href="{{ url_for('home') }}" class="nav-link {{ 'active' if active == 'home' }}"><i class="fas fa-house" aria-hidden="true"></i><span>Home</span></a>
+            <a href="{{ url_for('courses') }}" class="nav-link {{ 'active' if active == 'courses' }}"><i class="fas fa-graduation-cap" aria-hidden="true"></i><span>Courses</span></a>
+            <a href="{{ url_for('roadmap') }}" class="nav-link {{ 'active' if active == 'roadmap' }}"><i class="fas fa-route" aria-hidden="true"></i><span>Roadmaps</span></a>
+            <a href="{{ url_for('chatbot') }}" class="nav-link {{ 'active' if active == 'chatbot' }}"><i class="fas fa-robot" aria-hidden="true"></i><span>AI Assistant</span></a>
+            <p class="nav-label">Resources</p>
+            <a href="{{ url_for('download') }}" class="nav-link {{ 'active' if active == 'download' }}"><i class="fas fa-folder-open" aria-hidden="true"></i><span>Study materials</span></a>
+            {% if role == 'faculty' %}
+            <a href="{{ url_for('upload') }}" class="nav-link {{ 'active' if active == 'upload' }}"><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i><span>Upload</span></a>
+            {% endif %}
+            <p class="nav-label">Account</p>
+            <a href="{{ url_for('dashboard') }}" class="nav-link {{ 'active' if active == 'dashboard' }}"><i class="fas fa-gauge" aria-hidden="true"></i><span>Dashboard</span></a>
+            <a href="{{ url_for('logout') }}" class="nav-link"><i class="fas fa-right-from-bracket" aria-hidden="true"></i><span>Log out</span></a>
+        </nav>
+    </aside>
+    <div class="backdrop"></div>
+
+    <div class="main">
+        <main id="main-content" class="content">
+            {{ flashes() }}
+            {% block content %}{% endblock %}
+        </main>
+        <footer class="footer">
+            <span>&copy; {{ current_year }} <strong>IgniteXT</strong>. All rights reserved.</span>
+            <nav aria-label="Footer">
+                <a href="{{ url_for('courses') }}">Courses</a>
+                <a href="{{ url_for('roadmap') }}">Roadmaps</a>
+                <a href="{{ url_for('chatbot') }}">AI Assistant</a>
+                <a href="{{ url_for('download') }}">Study materials</a>
+            </nav>
+        </footer>
+    </div>
+</div>
+
+{% if active != 'chatbot' %}
+<a href="{{ url_for('chatbot') }}" class="fab" aria-label="Open AI assistant" title="Ask the AI assistant">
+    <img src="{{ url_for('static', filename='images/chatbot.png') }}" alt="" width="32" height="32">
+</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% macro flashes() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-stack" role="status" aria-live="polite">
+    {% for category, message in messages %}
+    <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}">
+        <i class="fas {{ 'fa-circle-check' if category == 'success' else 'fa-circle-exclamation' }}" aria-hidden="true"></i>
+        <span>{{ message }}</span>
+        <button type="button" class="close" aria-label="Dismiss message"><i class="fas fa-xmark"></i></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+{% endmacro %}
+
+{% macro course_card(course) %}
+<article class="card course-card hover-lift" data-search="{{ course.title }} {{ course.tutor }}">
+    <a href="{{ url_for('playlist') }}" class="course-thumb" tabindex="-1" aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/' ~ course.thumb) }}" alt="" loading="lazy" width="400" height="225">
+        <span class="chip"><i class="fas fa-play" aria-hidden="true"></i> {{ course.videos }} videos</span>
+    </a>
+    <div class="course-body">
+        <h3>{{ course.title }}</h3>
+        <div class="tutor">
+            <img src="{{ url_for('static', filename='images/' ~ course.avatar) }}" alt="" loading="lazy" width="32" height="32">
+            <div><strong>{{ course.tutor }}</strong><span>{{ course.date }}</span></div>
+        </div>
+        <a href="{{ url_for('playlist') }}" class="btn btn-outline">View playlist <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </div>
+</article>
+{% endmacro %}

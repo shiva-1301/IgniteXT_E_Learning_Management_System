@@ -1,149 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/chatbot.css">
-    <title>Chat Bot</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-
-</head>
-<body>
-    <header class="header">
-        <section class="flex">
-            <a href="{{ url_for('home') }}"><img src="/static/igniteXT icon.png" alt="Logo" class="logo"></a>
-                <span class="logo-text" style="font-family: 'Times New Roman', Times, serif; font-size: 2.3rem; font-weight: bolder; margin-right: -10px;color: yellow">
-                    <span style="margin-left: -5px; font-weight: 700; margin-right: -5px; color: white; font-family: 'Times New Roman', Times, serif;margin-left: -15px;">I</span>
-                    gnite <span style="margin-left: -5px; font-weight: 700;color: white;font-family: 'Times New Roman', Times, serif;">XT</span>
-            </span>
-
-            <form action="search.html" method="post" class="search-form">
-                <input type="text" name="search_box" required placeholder="Search courses..." maxlength="100">
-                <button type="submit" class="fas fa-search"></button>
-            </form>
-
-            <div class="icons">
-                <div id="menu-btn" class="fas fa-bars"></div>
-                <div id="search-btn" class="fas fa-search"></div>
-                <div id="user-btn" class="fas fa-user"></div>
-                <div id="toggle-btn" class="fas fa-sun"></div>
-            </div>
-
-            <div class="profile">
-                <img src="/static/images/pic-1.jpg" class="image" alt="Profile Picture">
-                <h3 class="name">{{ username }}</h3>
-                {% if role == 'faculty' %}
-            <p class="role">Faculty</p>
-            {% else %}
-            <p class="role">Student</p>
-            {% endif %}
-            <a href="{{ url_for('dashboard') }}" class="btn">View Profile</a>
-                <div class="flex-btn">
-                    <a href="{{ url_for('login_register') }}" class="option-btn">Log Out</a>
-                </div>
-            </div>
-        </section>
-    </header>
-
-    <!-- Sidebar Section -->
-    <div class="side-bar">
-        <div id="close-btn">
-            <i class="fas fa-times"></i>
-        </div>
-
-        <div class="profile">
-            <img src="/static/images/pic-1.jpg" class="image" alt="Profile Picture">
-            <h3 class="name">{{ username }}</h3>
-            {% if role == 'faculty' %}
-            <p class="role">Faculty</p>
-            {% else %}
-            <p class="role">Student</p>
-            {% endif %}
-            <a href="{{ url_for('dashboard') }}" class="btn">View Profile</a>
-        </div>
-
-        <nav class="navbar">
-            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i><span>Home</span></a><br>
-            <a href="{{ url_for('dashboard') }}"><i class="fas fa-question"></i><span>Dashboard</span></a><br>
-            <a href="{{url_for('courses')}}"><i class="fas fa-graduation-cap"></i><span>Courses</span></a><br>
-            <a href="{{ url_for('chatbot') }}"><i class="fa-regular fa-lemon"></i><span>ChatBot</span></a><br>
-            <a href="contact.html"><i class="fas fa-headset"></i><span>Contact Us</span></a><br>
-            {% if role == 'faculty' %}
-            <a href="{{ url_for('upload') }}"><i class="fa fa-upload"></i><span>Upload</span></a><br>
-            {% endif %}
-            <a href="{{ url_for('download') }}"><i class="fa fa-download"></i><span>Download</span></a><br>
-        </nav>
+{% extends "layout.html" %}
+{% set active = 'chatbot' %}
+{% block title %}AI Assistant{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>AI Assistant</h1>
+        <p>Ask anything about your courses. Powered by Google Gemini.</p>
     </div>
-    <div class="chat-container">
-        <div class="chat-header">
-            <h1>Chatbot</h1>
-        </div>
-        <div class="chat-history" id="chatHistory">
-            <!-- Chat messages will be dynamically added here -->
-        </div>
-        <div class="chat-input">
-            <form id="chatForm">
-                <textarea id="userInput" placeholder="Type your message here..." rows="2" required></textarea>
-                <button type="submit">Send</button>
-            </form>
+    <button type="button" class="btn btn-outline" id="clear-chat"><i class="fas fa-rotate-left" aria-hidden="true"></i> New chat</button>
+</div>
+
+{% if not chatbot_enabled %}
+<div class="alert alert-error" style="margin-bottom: 1rem;">
+    <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+    <span>The assistant is not configured on this server yet (missing <code>GEMINI_API_KEY</code>).</span>
+</div>
+{% endif %}
+
+<section class="card chat" aria-label="Chat with the AI assistant">
+    <div class="chat-history" id="chatHistory" aria-live="polite">
+        <div class="chat-empty" id="chatEmpty">
+            <i class="fas fa-robot" aria-hidden="true"></i>
+            <h3>How can I help you today?</h3>
+            <p class="muted">Try one of these to get started:</p>
+            <div class="suggestions">
+                <button type="button" class="btn btn-outline">Explain the CSS box model</button>
+                <button type="button" class="btn btn-outline">What is a REST API?</button>
+                <button type="button" class="btn btn-outline">Give me a 4-week Python study plan</button>
+            </div>
         </div>
     </div>
-
-    <script>
+    <form id="chatForm" class="chat-form">
+        <label for="userInput" class="sr-only">Your message</label>
+        <textarea id="userInput" class="input" placeholder="Type your message… (Enter to send, Shift+Enter for a new line)" rows="1" maxlength="4000" required></textarea>
+        <button type="submit" class="btn btn-primary" id="sendBtn" aria-label="Send message"><i class="fas fa-paper-plane" aria-hidden="true"></i><span class="word">Send</span></button>
+    </form>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+    (function () {
         const chatForm = document.getElementById('chatForm');
         const chatHistory = document.getElementById('chatHistory');
+        const input = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const emptyState = document.getElementById('chatEmpty');
+        let busy = false;
 
-        chatForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const userInput = document.getElementById('userInput').value;
-        
-            // Display user's message
-            const userMessage = document.createElement('div');
-            userMessage.className = 'chat-message user';
-            userMessage.textContent = userInput;
-            chatHistory.appendChild(userMessage);
-        
-            // Ensure messages are spaced out
-            chatHistory.appendChild(document.createElement('br')); // Add a line break
-        
-            // Scroll to the bottom
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        
-            // Send message to backend
-            const response = await fetch('/dashboard/generate-response', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `user_input=${encodeURIComponent(userInput)}`,
-            });
-            const data = await response.json();
-        
-            // Display chatbot's response
-            const botMessage = document.createElement('div');
-            botMessage.className = 'chat-message bot';
-            botMessage.innerHTML = styleChatbotResponse(data.response || data.error);
-            chatHistory.appendChild(botMessage);
-        
-            // Add another line break after bot's message
-            chatHistory.appendChild(document.createElement('br')); // Add a line break
-        
-            // Scroll to the bottom
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        
-            // Clear input field after sending the message
-            document.getElementById('userInput').value = ''; // Clears the input field
-        });
-        
-        // Function to style chatbot responses
-        function styleChatbotResponse(text) {
-            return text
-                .replace(/(?:\*\*(.*?)\*\*)/g, '<strong>$1</strong>') // Bold for headings
-                .replace(/(?:\*(.*?)\*)/g, '<em>$1</em>'); // Italic for paragraphs
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
-        
-    </script>
-    <footer class="footer">
-        &copy; 2024 by <span>IGNITEXT</span>. All rights reserved.
-    </footer>
 
-</body>
-</html>
+        // Escape first, then apply light markdown so model output can't inject HTML
+        function styleChatbotResponse(text) {
+            return escapeHtml(text)
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/(^|[^*])\*(?!\s)(.*?)\*/g, '$1<em>$2</em>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function addMessage(cls, html) {
+            if (emptyState) emptyState.remove();
+            const el = document.createElement('div');
+            el.className = 'msg ' + cls;
+            el.innerHTML = html;
+            chatHistory.appendChild(el);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+            return el;
+        }
+
+        async function send(text) {
+            if (busy || !text.trim()) return;
+            busy = true;
+            sendBtn.disabled = true;
+            addMessage('user', escapeHtml(text));
+            input.value = '';
+            const typing = addMessage('bot', '<span class="typing" aria-label="Assistant is typing"><span></span><span></span><span></span></span>');
+            try {
+                const response = await fetch('{{ url_for("generate_response") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'user_input=' + encodeURIComponent(text),
+                });
+                const data = await response.json();
+                if (data.response) {
+                    typing.innerHTML = styleChatbotResponse(data.response);
+                } else {
+                    typing.classList.add('error');
+                    typing.textContent = data.error || 'Something went wrong.';
+                }
+            } catch (err) {
+                typing.classList.add('error');
+                typing.textContent = 'Network error. Please check your connection and try again.';
+            } finally {
+                busy = false;
+                sendBtn.disabled = false;
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+                input.focus();
+            }
+        }
+
+        chatForm.addEventListener('submit', (e) => { e.preventDefault(); send(input.value); });
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(input.value); }
+        });
+        document.querySelectorAll('.suggestions button').forEach((b) => b.addEventListener('click', () => send(b.textContent)));
+        document.getElementById('clear-chat').addEventListener('click', () => window.location.reload());
+    })();
+</script>
+{% endblock %}

@@ -1,168 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Watch Video</title>
+{% extends "layout.html" %}
+{% set active = 'courses' %}
+{% block title %}Watch video{% endblock %}
+{% block content %}
+<nav aria-label="Breadcrumb" class="muted" style="margin-bottom: 1rem; font-size: .875rem;">
+    <a href="{{ url_for('courses') }}">Courses</a> / <a href="{{ url_for('playlist') }}">Complete HTML tutorial</a> / <span>Part 01</span>
+</nav>
 
-   <!-- Font Awesome CDN Link -->
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
-
-   <!-- Custom CSS File Link -->
-   <link rel="stylesheet" href="/static/watch-video.css">
-
-</head>
-<body>
-
-    <header class="header">
-        <section class="flex">
-            <img src="/static/igniteXT icon.png" alt="Logo" class="logo"> 
-            <span class="logo-text" style="font-family: 'Times New Roman', Times, serif; font-size: 2.3rem; font-weight: bolder; margin-right: -10px;color: yellow"> 
-                <span style="margin-left: -5px; font-weight: 700; margin-right: -5px; color: white; font-family: 'Times New Roman', Times, serif;margin-left: -15px;">I</span> gnite 
-                <span style="margin-left: -5px; font-weight: 700;color: white;font-family: 'Times New Roman', Times, serif;">XT</span>
-            </span>
-
-            <form action="search.html" method="post" class="search-form">
-                <input type="text" name="search_box" required placeholder="Search courses..." maxlength="100">
-                <button type="submit" class="fas fa-search"></button>
-            </form>
-
-            <div class="icons">
-                <!-- Added Icons for Sidebar Toggle, Dark Mode, and Profile Dropdown -->
-                <div id="menu-btn" class="fas fa-bars"></div>
-                <div id="search-btn" class="fas fa-search"></div>
-                <div id="user-btn" class="fas fa-user"></div>
-                <div id="toggle-btn" class="fas fa-sun"></div> <!-- Dark/Light Mode Toggle -->
-            </div>
-
-            <div class="profile">
-                <img src="/static/images/pic-1.jpg" class="image" alt="Profile Picture">
-                <h3 class="name">{{ username }}</h3>
-                {% if role == 'faculty' %}
-                    <p class="role">Faculty</p>
-                {% else %}
-                    <p class="role">Student</p>
-                {% endif %}
-                <a href="{{ url_for('dashboard') }}" class="btn">View Profile</a>
-                <div class="flex-btn">
-                    <a href="{{ url_for('login_register') }}" class="option-btn">Log Out</a>
-                </div>
-            </div>
-        </section>
-    </header>
-
-    <!-- Sidebar Section -->
-    <div class="side-bar">
-        <div id="close-btn">
-            <i class="fas fa-times"></i>
-        </div>
-
-        <div class="profile">
-            <img src="/static/images/pic-1.jpg" class="image" alt="Profile Picture">
-            <h3 class="name">{{ username }}</h3>
-            {% if role == 'faculty' %}
-            <p class="role">Faculty</p>
-            {% else %}
-            <p class="role">Student</p>
-            {% endif %}
-            <button><a href="{{ url_for('dashboard') }}" class="btn">View Profile</a></button>
-        </div>
-
-        <nav class="navbar">
-            <a href="{{ url_for('home') }}"><i class="fas fa-home"></i><span>Home</span></a><br>
-            <a href="{{ url_for('dashboard') }}"><i class="fas fa-question"></i><span>Dashboard</span></a><br>
-            <a href="{{ url_for('courses') }}"><i class="fas fa-graduation-cap"></i><span>Courses</span></a><br>
-            <a href="{{ url_for('chatbot') }}"><i class="fa-regular fa-lemon"></i><span>ChatBot</span></a><br>
-            <a href="contact.html"><i class="fas fa-headset"></i><span>Contact Us</span></a><br>
-        </nav>
+<section class="section">
+    <div class="player">
+        <video src="{{ url_for('static', filename='images/vid-1.mp4') }}" controls preload="metadata"
+               poster="{{ url_for('static', filename='images/post-1-1.png') }}">
+            Your browser does not support HTML5 video.
+        </video>
     </div>
-
-<section class="watch-video">
-
-   <div class="video-container">
-      <div class="video">
-         <video src="/static/images/vid-1.mp4" controls poster="images/post-1-1.png" id="video"></video>
-      </div>
-      <h3 class="title">Complete HTML Tutorial (Part 01)</h3>
-      <div class="info">
-         <p class="date"><i class="fas fa-calendar"></i><span>22-10-2022</span></p>
-         <p class="date"><i class="fas fa-heart"></i><span>44 likes</span></p>
-      </div>
-      <div class="tutor">
-         <img src="/static/images/pic-2.jpg" alt="">
-         <div>
-            <h3>John Deo</h3>
-            <span>Developer</span>
-         </div>
-      </div>
-      <form action="" method="post" class="flex">
-         <a href="{{ url_for('playlist') }}" class="inline-btn">View Playlist</a>
-         <button><i class="far fa-heart"></i><span>Like</span></button>
-      </form>
-      <p class="description">
-         Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque labore ratione, hic exercitationem mollitia obcaecati culpa dolor placeat provident porro.
-         Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid iure autem non fugit sint. A, sequi rerum architecto dolor fugiat illo, iure velit nihil laboriosam cupiditate voluptatum facere cumque nemo!
-      </p>
-   </div>
-
-</section>
-
-<section class="comments">
-
-   <h1 class="heading">User Comments</h1>
-
-   <!-- Comment Submission Form -->
-   <form action="{{ url_for('video') }}" method="POST" class="add-comment">
-      <h3>Add Comments</h3>
-      <textarea name="comment" placeholder="Write your comment..." required maxlength="1000" cols="30" rows="10"></textarea>
-      <input type="submit" value="Add Comment" class="inline-btn">
-   </form>
-
-   <!-- Flash messages to notify the user of actions like comment deletion -->
-   {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-         <div class="flash-messages">
-            {% for category, message in messages %}
-               <div class="flash-message {{ category }}">{{ message }}</div>
-            {% endfor %}
-         </div>
-      {% endif %}
-   {% endwith %}
-
-   <h1 class="heading">User Comments</h1>
-   <div class="box-container">
-      {% for comment in comments %}
-         <div class="box">
-            <div class="user">
-               <img src="/static/images/pic-1.jpg" alt="">
-               <div>
-                  <h3>{{ comment.username }}</h3>
-                  <span>{{ comment.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</span>
-               </div>
+    <div class="card" style="margin-top: 1rem;">
+        <h1 style="font-size: 1.5rem;">Complete HTML Tutorial (Part 01)</h1>
+        <div class="meta">
+            <span><i class="fas fa-calendar" aria-hidden="true"></i>22-10-2022</span>
+            <span><i class="fas fa-heart" aria-hidden="true"></i>44 likes</span>
+            <span><i class="fas fa-comment" aria-hidden="true"></i>{{ comments|length }} comments</span>
+        </div>
+        <div class="row" style="justify-content: space-between; margin-bottom: 1rem;">
+            <div class="tutor">
+                <img src="{{ url_for('static', filename='images/pic-2.jpg') }}" alt="" width="32" height="32">
+                <div><strong>John Deo</strong><span>Developer</span></div>
             </div>
-            <div class="comment-box">{{ comment.text }}</div>
-      
-            {% if role == 'faculty' %}
-               <!-- Only show the delete button for faculty -->
-               <form action="{{ url_for('delete_comment', comment_id=comment['_id']) }}" method="POST">
-                  <input type="submit" value="Delete" class="inline-delete-btn">
-               </form>
-            {% endif %}
-         </div>
-      {% else %}
-         <p>No comments yet.</p>
-      {% endfor %}
-   </div>
-   
+            <a href="{{ url_for('playlist') }}" class="btn btn-outline"><i class="fas fa-list" aria-hidden="true"></i> View playlist</a>
+        </div>
+        <p class="muted mt-0">In this first lesson we set up a project, write our first HTML document and learn how elements, tags and attributes fit together.</p>
+    </div>
 </section>
 
-<footer class="footer">
-   &copy; 2024 by <span>IGNITEXT</span>. All rights reserved.
-</footer>
+<section id="comments" class="section" aria-labelledby="comments-title">
+    <div class="section-title"><h2 id="comments-title">Comments ({{ comments|length }})</h2></div>
 
-<!-- Custom JS File Link -->
-<script src="/static/script.js"></script>
-   
-</body>
-</html>
+    <form action="{{ url_for('video') }}" method="POST" class="card" style="margin-bottom: 1.25rem;">
+        <div class="field">
+            <label for="comment">Add a comment</label>
+            <textarea id="comment" name="comment" class="input" placeholder="Share a question or thought about this lesson…" required maxlength="1000" rows="3"></textarea>
+            <span class="hint">Max 1000 characters. Be kind and constructive.</span>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane" aria-hidden="true"></i> Post comment</button>
+    </form>
+
+    {% if comments %}
+    <div class="stack">
+        {% for comment in comments %}
+        <article class="card comment">
+            <img src="{{ url_for('static', filename='images/pic-1.jpg') }}" class="avatar" alt="" width="40" height="40">
+            <div class="comment-body">
+                <div class="comment-head">
+                    <strong>{{ comment.username }}</strong>
+                    <time datetime="{{ comment.timestamp.isoformat() }}">{{ comment.timestamp.strftime('%d %b %Y, %H:%M') }}</time>
+                    {% if role == 'faculty' %}
+                    <form action="{{ url_for('delete_comment', comment_id=comment['_id']) }}" method="POST" class="comment-actions"
+                          onsubmit="return confirm('Delete this comment?');">
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash" aria-hidden="true"></i> Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+                <p>{{ comment.text }}</p>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty">
+        <i class="far fa-comments" aria-hidden="true"></i>
+        <h3>No comments yet</h3>
+        <p>Be the first to start the discussion.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
